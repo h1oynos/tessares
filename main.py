@@ -2,11 +2,15 @@ import pygame
 import pygame_gui as gui
 import numpy as np
 
+import gamevars as gv
+
+from visual import particles as part
 
 # Setting up Pygame
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
+manager = gui.UIManager((1280, 720))
 running = True
 
 # Setting up the game
@@ -63,7 +67,7 @@ class Piece:
         self.type = shape
         match shape:
             case 1: # L
-                [
+                self.rotations = [
                     [[0, 0, 0, 0],
                      [0, 0, 0, 0],
                      [-1, -1, -1, 0],
@@ -85,7 +89,7 @@ class Piece:
                      [0, -1, -1, 0]]
                 ]
             case 2: # J
-                [
+                self.rotations = [
                     [[0, 0, 0, 0],
                      [0, 0, 0, 0],
                      [-2, -2, -2, 0],
@@ -107,7 +111,7 @@ class Piece:
                      [0, -2, 0, 0]]
                 ]
             case 3: # S
-                [
+                self.rotations = [
                     [[0, 0, 0, 0],
                      [0, 0, 0, 0],
                      [0, -3, -3, 0],
@@ -129,7 +133,7 @@ class Piece:
                      [0, -3, 0, 0]]
                 ]
             case 4: # Z
-                [
+                self.rotations = [
                     [[0, 0, 0, 0],
                      [0, 0, 0, 0],
                      [-4, -4, 0, 0],
@@ -151,7 +155,7 @@ class Piece:
                      [0, -4, 0, 0]]
                 ]
             case 5: # O
-                [
+                self.rotations = [
                     [[0, 0, 0, 0],
                      [0, 0, 0, 0],
                      [0, -5, -5, 0],
@@ -173,7 +177,7 @@ class Piece:
                      [0, -5, -5, 0]]
                 ]
             case 6: # I
-                [
+                self.rotations = [
                     [[0, 0, 0, 0],
                      [-6, -6, -6, -6],
                      [0, 0, 0, 0],
@@ -195,7 +199,7 @@ class Piece:
                      [0, 0, -6, 0]]
                 ]
             case 7: # T
-                [
+                self.rotations = [
                     [[0, 0, 0, 0],
                      [0, 0, 0, 0],
                      [-7, -7, -7, 0],
@@ -214,25 +218,76 @@ class Piece:
                     [[0, 0, 0, 0],
                      [0, -7, 0, 0],
                      [0, -7, -7, 0],
-                     [0, -7, 0, 0]
+                     [0, -7, 0, 0]]
                 ]
-                ]
+
+# Key Frame Timers
+left_held_time = 0
+right_held_time = 0
+up_held_time = 0
+down_held_time = 0
 
 while running:
     # Event Polling Loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            # match event.key:
+            #     case pygame.K_KP4:
+            #         print("Left Pressed")
+            #     case pygame.K_KP5:
+            #         print("Soft Drop Pressed")
+            #     case pygame.K_KP6:
+            #         print("Right Pressed")
+            #     case pygame.K_KP8:
+            #         print("Hard Drop Pressed")
+            #     case pygame.K_a:
+            #         print("Rotate CCW Pressed")
+            #     case pygame.K_s:
+            #         print("Rotate CW Pressed")
+            #     case pygame.K_d:
+            #         print("Hold Pressed")
+            if event.key == pygame.K_KP4 or event.key == pygame.K_LEFT:
+                print("Left Pressed")
+                left_held_time += 1
+            else:
+                left_held_time = 0
+            if event.key == pygame.K_KP5 or event.key == pygame.K_DOWN:
+                print("Soft Drop Pressed")
+                down_held_time += 1
+            else: 
+                down_held_time = 0
+            if event.key == pygame.K_KP6 or event.key == pygame.K_RIGHT:
+                print("Right Pressed")
+                right_held_time += 1
+            else:
+                right_held_time = 0
+            if event.key == pygame.K_KP2 or event.key == pygame.K_UP:
+                print("Hard Drop Pressed")
+                up_held_time += 1
+            else:
+                up_held_time = 0
+            if event.key == pygame.K_a or event.key == pygame.K_z:
+                print("CCW Rotation Pressed")
+            if event.key == pygame.K_s or event.key == pygame.K_x:
+                print("CW Rotation Pressed")
+            if event.key == pygame.K_d or event.key == pygame.K_c:
+                print("Hold pressed")
+            
+
 
     screen.fill((0, 0, 0))
 
     ## Begin Rendering Loop 
 
     draw_matrix()
+    manager.draw_ui(screen)
+
     ## End Rendering Loop
 
     pygame.display.flip()
 
-    clock.tick(60)  # limits FPS to 60
+    dt = clock.tick(60) / 1000  # limits FPS to 60
 
 pygame.quit()

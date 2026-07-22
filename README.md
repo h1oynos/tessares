@@ -3,7 +3,7 @@
 TesSaRes is a project that aims to provide a block stacking experience for everyone, whether a beginner, advanced, or grandmaster-level in the genre. 
 
 # Ways to Play
-*Note: Some modes listed here may not be in the game, and will be marked as such.*
+*Note: This game is a work in progress, and as such, the listed modes may not yet be implemented.*
 
 ## Classic
 *Methods of play you can find just about anywhere else. The classic block stacking experience*
